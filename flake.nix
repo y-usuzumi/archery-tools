@@ -1,5 +1,5 @@
 {
-  description = "Archery DB flake";
+  description = "Nix Flake for Archery tools";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -13,7 +13,12 @@
       awsProfile = "AdministratorAccess-909810189216";
       in rec {
         devShell = pkgs.mkShell {
-          buildInputs = [ pkgs.awscli2 ];
+          buildInputs = with pkgs; [
+            awscli2
+            nodejs_22
+            nodePackages.typescript
+            nodePackages.typescript-language-server
+          ];
 	  shellHook = ''
 	    export AWS_PROFILE=${awsProfile}
 	  '';
