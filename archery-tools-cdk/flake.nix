@@ -1,5 +1,5 @@
 {
-  description = "Nix Flake for Archery tools";
+  description = "Nix Flake for Archery tools CDK";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -18,7 +18,8 @@
             nodejs_22
             nodePackages.typescript
             nodePackages.typescript-language-server
-          ];
+	    nodePackages.aws-cdk
+	  ];
 	  shellHook = ''
 	    export AWS_PROFILE=${awsProfile}
 	  '';
