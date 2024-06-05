@@ -1,76 +1,46 @@
 {
-  description = "Nix Flake for Archery tools lambdas";
+  description = "Archery Tools Lambdas";
 
   inputs = {
-    nixpkgs.url = "flake:nixpkgs";
-    flake-parts.url = "flake:flake-parts";
-    systems.url = "flake:systems";
+    nixpkgs.url      = "github:NixOS/nixpkgs/nixos-unstable";
     rust-overlay.url = "github:oxalica/rust-overlay";
-
-    # Dev tools
-    treefmt-nix.url = "github:numtide/treefmt-nix";
+    flake-utils.url  = "github:numtide/flake-utils";
   };
 
-  outputs = inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = import inputs.systems;
-      imports = [
-        inputs.treefmt-nix.flakeModule
-      ];
-      perSystem = { config, self', pkgs, lib, system, ... }:
-        let
-          cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
-          nonRustDeps = with pkgs; [
-            libiconv
-            awscli2
-          ];
-          awsProfile = "AdministratorAccess-909810189216";
-        in
-        {
-          # Rust package
-          packages.default = pkgs.rustPlatform.buildRustPackage {
-            inherit (cargoToml.package) name version;
-            src = ./.;
-            cargoLock.lockFile = ./Cargo.lock;
-          };
-
-          # Rust dev environment
-          devShells.default = pkgs.mkShell {
-            inputsFrom = [
-              config.treefmt.build.devShell
-            ];
-	    # Not using just for now
-            # shellHook = ''
-            #   # For rust-analyzer 'hover' tooltips to work.
-            #   export RUST_SRC_PATH=${pkgs.rustPlatform.rustLibSrc}
-
-            #   echo
-            #   echo "🍎🍎 Run 'just <recipe>' to get started"
-            #   just
-            # '';
-            shellHook = ''
-            export AWS_PROFILE=${awsProfile}
-            '';
-            buildInputs = nonRustDeps;
-            nativeBuildInputs = with pkgs; [
-              just
-              rustc
-              cargo
-              cargo-lambda
-              cargo-watch
-              rust-analyzer
-            ];
-          };
-
-          # Add your auto-formatters here.
-          # cf. https://numtide.github.io/treefmt/
-          treefmt.config = {
-            projectRootFile = "flake.nix";
-            programs = {
-              nixpkgs-fmt.enable = true;
-              rustfmt.enable = true;
-            };
-          };
+  outputs = { self, nixpkgs, rust-overlay, flake-utils, ... }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        overlays = [ (import rust-overlay) ];
+        pkgs = import nixpkgs {
+          inherit system overlays;
         };
-    };
+        awsProfile = "AdministratorAccess-909810189216";
+      in
+      {
+        devShells.default = with pkgs; mkShell {
+          buildInputs = [
+            openssl
+            pkg-config
+            eza
+            fd
+            (rust-bin.stable.latest.default.override {
+              extensions = [ "rust-src" ];
+              targets = [ 
+                "arm-unknown-linux-gnueabihf"
+                "aarch64-unknown-linux-gnu"
+              ];
+            })
+          ];
+          nativeBuildInputs = [
+            cargo-lambda
+          ];
+
+          shellHook = ''
+            alias ls=eza
+            alias find=fd
+            export AWS_PROFILE=${awsProfile}
+          '';
+        };
+      }
+    );
 }
