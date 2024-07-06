@@ -1,5 +1,5 @@
 {
-  description = "Archery Tools Lambdas";
+  description = "Archery Tools Server";
 
   inputs = {
     nixpkgs.url      = "github:NixOS/nixpkgs/nixos-unstable";
@@ -22,8 +22,6 @@
           buildInputs = [
             openssl
             pkg-config
-            eza
-            fd
             (rust-bin.stable.latest.default.override {
               extensions = [ "rust-src" ];
             })
@@ -32,8 +30,6 @@
           ];
 
           shellHook = ''
-            alias ls=eza
-            alias find=fd
           '';
         };
       }
