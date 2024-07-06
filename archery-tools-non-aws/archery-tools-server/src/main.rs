@@ -1,7 +1,5 @@
-mod env;
 mod router;
-
-use env::ENV;
+use archery_tools_server::env::ENV;
 use router::build_router;
 
 #[tokio::main]

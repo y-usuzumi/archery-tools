@@ -1,11 +1,10 @@
+use archery_tools_server::env::ENV;
 use axum::{
     http::StatusCode,
     routing::{get, post},
     Json, Router,
 };
 use serde::{Deserialize, Serialize};
-
-use crate::env::ENV;
 
 pub(crate) fn build_router() -> Router {
     // build our application with a route
@@ -18,7 +17,7 @@ pub(crate) fn build_router() -> Router {
 
 // basic handler that responds with a static string
 async fn root() -> String {
-    ENV.postgresql.clone()
+    "Hello world".to_owned()
 }
 
 async fn create_user(
