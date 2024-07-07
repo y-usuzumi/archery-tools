@@ -16,7 +16,7 @@ const POSTGRES_USER_DEFAULT: &str = "postgres";
 const POSTGRES_PASSWORD: &str = "ARCHERY_TOOLS_POSTGRES_PASSWORD";
 const POSTGRES_PASSWORD_DEFAULT: &str = "6sXZQfAPZyGcp7RAsE7u";
 
-const POSTGRES_DB: &str = "ARCHERY_TOOLS_POSTGRES_PASSWORD";
+const POSTGRES_DB: &str = "ARCHERY_TOOLS_POSTGRES_DB";
 const POSTGRES_DB_DEFAULT: &str = "archery-tools";
 
 #[derive(Deserialize, Debug)]
@@ -51,7 +51,7 @@ lazy_static! {
             postgres_password,
             postgres_db,
         };
-        println!("Env: {:?}", env);
+        log::trace!("Env: {:?}", env);
         env
     };
 }

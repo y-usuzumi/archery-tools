@@ -10,7 +10,9 @@ services:
     environment:
       POSTGRES_USER: postgres # Just use the default value but keep this line for clarity
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_DB: archery-db
+      POSTGRES_DB: archery-tools
+    ports:
+      - 5432:5432
 
   adminer:
     image: adminer

@@ -3,14 +3,28 @@ name = "archery-tools-server"
 version = "0.1.0"
 edition = "2021"
 
+[workspace]
+members = [".", "entity", "migration"]
+
 [dependencies]
 axum = "0.7.5"
 dotenvy = "0.15.7"
 env_logger = "0.11.3"
 lazy_static = "1.5.0"
 log = "0.4.22"
-sea-orm = { version = "0.12.15", features = ["sqlx-postgres", "runtime-tokio-rustls", "debug-print", "mock", "macros", "with-chrono", "with-json", "with-uuid"] }
+sea-orm = { version = "0.12.15", features = [
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+    "debug-print",
+    "mock",
+    "macros",
+    "with-chrono",
+    "with-json",
+    "with-uuid",
+] }
 serde = { version = "1.0.203", features = ["derive"] }
 serde_with = "3.8.1"
 tokio = { version = "1.38.0", features = ["full"] }
 tracing-subscriber = "0.3.18"
+entity = { path = "entity" }
+migration = { path = "migration" }

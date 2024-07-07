@@ -1,4 +1,3 @@
-use archery_tools_server::env::ENV;
 use axum::{
     http::StatusCode,
     routing::{get, post},

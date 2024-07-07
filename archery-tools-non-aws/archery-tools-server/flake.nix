@@ -27,6 +27,7 @@
             })
           ];
           nativeBuildInputs = [
+	    sea-orm-cli
           ];
 
           shellHook = ''
