@@ -28,3 +28,6 @@ tokio = { version = "1.38.0", features = ["full"] }
 tracing-subscriber = "0.3.18"
 entity = { path = "entity" }
 migration = { path = "migration" }
+uuid = { version = "1.10.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
+axum-login = "0.15.3"
+rand = "0.8.5"
