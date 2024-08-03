@@ -1,8 +1,8 @@
 use super::user::{Credentials, User, UserId};
+use axum::async_trait;
 use axum_login::{AuthUser, AuthnBackend};
 use lazy_static::lazy_static;
 use std::collections::HashMap;
-use uuid::Uuid;
 
 fn uuid_user_pair(user: User) -> (UserId, User) {
     let uuid = user.id();
@@ -50,6 +50,7 @@ impl Backend {
     }
 }
 
+#[async_trait]
 impl AuthnBackend for Backend {
     #[doc = " Authenticating user type."]
     type User = User;
@@ -63,41 +64,20 @@ impl AuthnBackend for Backend {
     #[doc = " Authenticates the given credentials with the backend."]
     #[must_use]
     #[allow(clippy::type_complexity, clippy::type_repetition_in_bounds)]
-    fn authenticate<'life0, 'async_trait>(
-        &'life0 self,
+    async fn authenticate(
+        &self,
         creds: Self::Credentials,
-    ) -> ::core::pin::Pin<
-        Box<
-            dyn ::core::future::Future<Output = Result<Option<Self::User>, Self::Error>>
-                + ::core::marker::Send
-                + 'async_trait,
-        >,
-    >
-    where
-        'life0: 'async_trait,
-        Self: 'async_trait,
-    {
+    ) -> Result<Option<Self::User>, Self::Error> {
         todo!()
     }
 
     #[doc = " Gets the user by provided ID from the backend."]
     #[must_use]
     #[allow(clippy::type_complexity, clippy::type_repetition_in_bounds)]
-    fn get_user<'life0, 'life1, 'async_trait>(
-        &'life0 self,
-        user_id: &'life1 axum_login::UserId<Self>,
-    ) -> ::core::pin::Pin<
-        Box<
-            dyn ::core::future::Future<Output = Result<Option<Self::User>, Self::Error>>
-                + ::core::marker::Send
-                + 'async_trait,
-        >,
-    >
-    where
-        'life0: 'async_trait,
-        'life1: 'async_trait,
-        Self: 'async_trait,
-    {
+    async fn get_user(
+        &self,
+        user_id: &axum_login::UserId<Self>,
+    ) -> Result<Option<Self::User>, Self::Error> {
         todo!()
     }
 }
