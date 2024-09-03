@@ -1,1 +1,5 @@
 .env
+
+# Nix develop --profile
+archery-tools
+archery-tools-*-link
